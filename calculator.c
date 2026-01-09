@@ -1,69 +1,81 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
+#include <stdlib.h>
 
 int main()
 {
-    float num1, num2, result;
+    float currentValue, nextNumber;
     char operator;
-    int continueCalculating = 1;
+    bool isNewCalculation = false;
 
-    printf("Simple Calculator in C\n");
+    printf("--- Continuous Calculator ---\n");
 
     do
     {
-        printf("\nEnter first number: ");
-        scanf("%f", &num1);
+        if (!isNewCalculation)
+        {
+            printf("\nEnter starting number: ");
+            scanf("%f", &currentValue);
+            isNewCalculation = true;
+        }
 
-        printf("Enter an operator (+, -, *, /, ^) or 'q' to stop: ");
+        printf("\n[Current Value: %.2f]\n", currentValue);
+        printf("Operator (+, -, *, /, ^) | 'c' to Clear | 'q' to Quit: ");
         scanf(" %c", &operator);
 
         if (operator == 'q' || operator == 'Q')
         {
-            continueCalculating = 0;
-            printf("Exiting the calculator. Goodbye!\n");
-            break; 
+            printf("Exiting. Goodbye!\n");
+            break;
         }
 
-        printf("Enter second number: ");
-        scanf("%f", &num2);
+        if (operator == 'c' || operator == 'C')
+        {
+            isNewCalculation = false;
+            printf("Memory Cleared. Starting new calculation.\n");
+            continue;
+        }
+
+        printf("Enter next number: ");
+        scanf("%f", &nextNumber);
+        system("cls"); 
 
         switch (operator)
         {
-            case '+':
-                result = num1 + num2;
-                printf("%.2f + %.2f = %.2f\n", num1, num2, result);
-                break;
+        case '+':
+            currentValue += nextNumber;
+            break;
 
-            case '-':
-                result = num1 - num2;
-                printf("%.2f - %.2f = %.2f\n", num1, num2, result);
-                break;
-            case '*':
-                result = num1 * num2;
-                printf("%.2f * %.2f = %.2f\n", num1, num2, result);
-                break;
+        case '-':
+            currentValue -= nextNumber;
+            break;
 
-            case '/':
-                if (num2 != 0) {
-                    result = num1 / num2;
-                    printf("%.2f / %.2f = %.2f\n", num1, num2, result);
-                } 
-                else 
-                {
-                    printf("Error: Division by zero is not allowed.\n");
-                }
-                break;
+        case '*':
+            currentValue *= nextNumber;
+            break;
 
-            case '^':
-                result = pow(num1, num2);
-                printf("%.2f ^ %.2f = %.2f\n", num1, num2, result);
-                break;
+        case '/':
+            if (nextNumber != 0)
+            {
+                currentValue /= nextNumber;
+            }
+            else
+            {
+                printf("Error: Division by zero!\n");
+            }
+            /* no fallthrough */
+            break;
 
-            default:
-                printf("Error: Invalid operator.\n");
+        case '^':
+            currentValue = pow(currentValue, nextNumber);
+            break;
+
+        default:
+            printf("Invalid operator.\n");
         }
-        
-    } while (continueCalculating);
+
+    } while (true);
 
     return 0;
 }
